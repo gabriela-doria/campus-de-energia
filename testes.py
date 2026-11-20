@@ -88,6 +88,18 @@ def teste_atendimento_entre_0_e_100():
         assert 0 <= r["horas_100"] <= dados.HORAS, r
 
 
+def teste_corte_cai_com_bateria():
+    """Sem cliente, a energia cortada nunca aumenta quando a bateria cresce?"""
+    cortes = [r["cortada"] for r in sensibilidade.varredura_bateria()]
+    assert all(b <= a + 1e-3 for a, b in zip(cortes, cortes[1:])), cortes
+
+
+def teste_bateria_retorno_decrescente():
+    """Cada MWh a mais de bateria rende no máximo o que rendeu o MWh anterior?"""
+    ganhos = [r["ganho_por_mwh"] for r in sensibilidade.varredura_bateria()[1:]]
+    assert all(b <= a + 1e-3 for a, b in zip(ganhos, ganhos[1:])), ganhos
+
+
 if __name__ == "__main__":
     testes = [f for nome, f in sorted(globals().items()) if nome.startswith("teste_")]
     for t in testes:

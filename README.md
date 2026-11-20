@@ -46,6 +46,17 @@ Quanto mais apertada a conexão, mais vale ter o cliente ao lado: com 300 MW, to
 Com preço de contrato menor, o ganho cai mas continua alto: +64,4% a 100 u.m./MWh e +50,5% a 80 u.m./MWh.
 Em outras cinco semanas fictícias, o ganho fica entre +107,2% e +119,8%, então a semana padrão é a de menor ganho.
 
+## Segunda pergunta: mais bateria ou mais conexão?
+
+No cenário sem cliente, o que reduz mais a energia cortada?
+
+![Energia cortada com mais bateria ou mais conexão, sem cliente](figuras/corte_por_bateria_e_conexao.png)
+
+**Mais conexão, com folga.** 50 MW a mais de conexão (de 100 para 150 MW) cortam 6.515 MWh a menos na semana. Quadruplicar a bateria (de 200 para 800 MWh) corta só 1.380 MWh a menos.
+A bateria tem retorno decrescente: o primeiro degrau rende 503 u.m. por MWh de bateria na semana, e o último, 13 u.m.
+O motivo é que a conexão de 100 MW fica cheia em 155 das 168 horas, então a bateria quase não tem hora livre para descarregar. Com 200 MW de conexão, o corte cai para 261 MWh (99,0% aproveitado).
+Limite: a conta não inclui o custo de investimento. Ela compara energia e receita, não quanto custa cada MWh de bateria ou cada MW de linha. Tabelas completas em [sensibilidade.md](sensibilidade.md).
+
 ## Como rodar
 
 Precisa de Python 3.11 ou mais novo.
@@ -58,6 +69,7 @@ python -m venv .venv
 pip install -r requirements.txt
 python testes.py
 python rodar.py
+python sensibilidade.py
 ```
 
 No Mac ou Linux, troque a quarta linha por `source .venv/bin/activate`.
@@ -66,8 +78,8 @@ No Mac ou Linux, troque a quarta linha por `source .venv/bin/activate`.
 |---|---|
 | `dados.py` | Os dados fictícios e os pesos. É aqui que se muda o cenário. |
 | `modelo.py` | A programação linear, o preço-sombra e a matriz de decisão. |
-| `sensibilidade.py` | A mesma conta com outra conexão, outro preço e outras semanas. |
-| `testes.py` | Oito conferências do resultado. |
+| `sensibilidade.py` | A mesma conta com outra conexão, outro preço e outras semanas, e a comparação entre bateria e conexão (gera `sensibilidade.md` e o terceiro gráfico). |
+| `testes.py` | Dez conferências do resultado. |
 | `rodar.py` | Roda tudo e gera `resultados.md` e os gráficos. |
 
 ### Como eu conferi
@@ -90,7 +102,7 @@ No Mac ou Linux, troque a quarta linha por `source .venv/bin/activate`.
 
 ## Como construí
 
-Exercício pessoal, feito em novembro de 2026, com os métodos que estudei em Análise de Sistemas Ambientais (Poli-USP): programação linear, preço-sombra e decisão multicritério. Eu defini o problema, os métodos e os critérios. O código foi escrito com IA (Claude como agente de código) e conferido com os testes acima. Não usa material da disciplina.
+Exercício pessoal, feito em novembro de 2026, com os métodos que estudei em Análise de Sistemas Ambientais (Poli-USP): programação linear, preço-sombra e decisão multicritério. Eu defini o problema, as duas perguntas, os métodos e os critérios. O código foi escrito com IA (Claude como agente de código) e conferido com os testes acima. Não usa material da disciplina.
 
 ---
 
