@@ -16,6 +16,8 @@ Um parque eólico e solar gera mais do que cabe na sua linha de conexão com a r
 
 **Com um data center ao lado, o parque fictício aproveita 100% da energia em vez de 64%, e a receita da semana quase dobra (+96%).**
 
+O ganho depende de quão apertada é a conexão: vai de +24,5% com 300 MW de conexão a +95,6% com 100 MW.
+
 ![Para onde vai a energia de cada hora, sem cliente e com data center](figuras/destino_da_energia.png)
 
 | Cenário | Receita (u.m.) | Energia aproveitada | 1 MW a mais de conexão vale (u.m./semana) |
@@ -30,6 +32,19 @@ Como ler a última coluna: sem cliente, a conexão é o gargalo e cada MW a mais
 ![Nota final de cada cliente](figuras/nota_dos_clientes.png)
 
 O data center ganha com os pesos do exemplo (receita 40%, energia aproveitada 25%, empregos locais 20%, prazo 15%). Se o peso maior for para **prazo** ou **empregos locais**, quem ganha é a indústria de turno diurno. A decisão depende dos pesos, e o modelo mostra isso. Tabelas completas em [resultados.md](resultados.md).
+
+## E se as premissas mudarem?
+
+| Conexão (MW) | Energia aproveitada sem cliente | Ganho com o data center |
+|---:|---:|---:|
+| 100 | 64,1% | +95,6% |
+| 150 | 88,3% | +41,5% |
+| 200 | 99,0% | +26,0% |
+| 300 | 100,0% | +24,5% |
+
+Quanto mais apertada a conexão, mais vale ter o cliente ao lado: com 300 MW, toda a energia já cabe na rede.
+Com preço de contrato menor, o ganho cai mas continua alto: +64,4% a 100 u.m./MWh e +50,5% a 80 u.m./MWh.
+Em outras cinco semanas fictícias, o ganho fica entre +107,2% e +119,8%, então a semana padrão é a de menor ganho.
 
 ## Como rodar
 
@@ -51,7 +66,8 @@ No Mac ou Linux, troque a quarta linha por `source .venv/bin/activate`.
 |---|---|
 | `dados.py` | Os dados fictícios e os pesos. É aqui que se muda o cenário. |
 | `modelo.py` | A programação linear, o preço-sombra e a matriz de decisão. |
-| `testes.py` | Seis conferências do resultado. |
+| `sensibilidade.py` | A mesma conta com outra conexão, outro preço e outras semanas. |
+| `testes.py` | Oito conferências do resultado. |
 | `rodar.py` | Roda tudo e gera `resultados.md` e os gráficos. |
 
 ### Como eu conferi
@@ -66,6 +82,8 @@ No Mac ou Linux, troque a quarta linha por `source .venv/bin/activate`.
 - **Uma semana só.** Não há variação entre estações do ano nem entre anos.
 - **Previsão perfeita.** O modelo conhece a semana inteira de antemão. Na vida real há erro de previsão.
 - **O cliente não é atendido 100% pelo parque.** Quando falta geração, ou quando a rede paga mais (das 18h às 22h no exemplo), o cliente compra de outra fonte. Esse custo não entra na conta.
+- **O parque atende 86,8% do consumo do data center.** O atendimento é de 100% em 123 das 168 horas da semana. O resto vem de outra fonte.
+- **Conexão apertada de propósito.** Uma conexão de 100 MW para 500 MW instalados é uma premissa extrema, escolhida para deixar o gargalo visível. Com mais conexão, o ganho do data center cai.
 - **Sem custo de investimento.** A conta é de receita. Não inclui o custo da bateria, da linha ou das obras.
 - **"Energia aproveitada"** é tudo o que não foi cortado. A perda de 10% na carga da bateria conta como aproveitada.
 - **Notas de 0 a 1** comparam só estas três alternativas. Uma quarta alternativa mudaria as notas.

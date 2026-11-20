@@ -17,9 +17,9 @@ BATERIA_MWH = 200.0       # energia que a bateria guarda
 RENDIMENTO_CARGA = 0.90   # de cada 1 MWh que entra, 0,9 MWh fica guardado
 
 
-def geracao():
-    """Geração prevista do parque em cada hora (MW)."""
-    rng = np.random.default_rng(SEMENTE)
+def geracao(semente=SEMENTE):
+    """Geração prevista do parque em cada hora (MW). Outra semente dá outra semana."""
+    rng = np.random.default_rng(semente)
     h = np.arange(HORAS)
     hora_do_dia = h % 24
 

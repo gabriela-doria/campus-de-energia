@@ -5,6 +5,7 @@ Cada teste responde a uma pergunta simples. Se algum falhar, o resultado não é
 import numpy as np
 
 import dados
+import sensibilidade
 from modelo import nota_multicriterio, otimizar, pesos_com_foco, sem_bateria_na_mao
 
 GER = dados.geracao()
@@ -72,6 +73,19 @@ def teste_multicriterio():
     tabela = {"A": {"x": 10, "y": 5}, "B": {"x": 0, "y": 1}}
     notas = nota_multicriterio(tabela, {"x": 0.7, "y": 0.3}, {"y"})
     assert abs(notas["A"] - 0.7) < 1e-9 and abs(notas["B"] - 0.3) < 1e-9
+
+
+def teste_ganho_cai_com_conexao():
+    """O ganho com o data center não aumenta quando a conexão aumenta?"""
+    ganhos = [r["ganho"] for r in sensibilidade.por_conexao()]
+    assert all(b <= a + 1e-6 for a, b in zip(ganhos, ganhos[1:])), ganhos
+
+
+def teste_atendimento_entre_0_e_100():
+    """O atendimento de cada cliente fica entre 0% e 100%?"""
+    for r in sensibilidade.atendimento():
+        assert -1e-6 <= r["atendido"] <= 100 + 1e-6, r
+        assert 0 <= r["horas_100"] <= dados.HORAS, r
 
 
 if __name__ == "__main__":

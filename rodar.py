@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import dados
+import sensibilidade
 from modelo import nota_multicriterio, otimizar, pesos_com_foco
 
 PASTA = Path(__file__).parent
@@ -66,7 +67,33 @@ def escrever_tabelas(resultados, tabela, notas, focos):
           "Cada linha dá 55% do peso a um critério e divide o resto na proporção original.", "",
           "| Critério com mais peso | Quem ganha |", "|---|---|"]
     L += [f"| {c.replace('_', ' ')} | {v} |" for c, v in focos.items()]
+    L += tabelas_sensibilidade(sensibilidade.tudo())
     (PASTA / "resultados.md").write_text("\n".join(L) + "\n", encoding="utf-8")
+
+
+def tabelas_sensibilidade(s):
+    """Seção "E se as premissas mudarem?" de resultados.md."""
+    sinal = lambda g: ("+" if g >= 0 else "") + num(g, 1) + "%"
+    L = ["", "## E se as premissas mudarem?", "",
+         "Ganho com o data center = receita com o data center comparada à receita sem cliente, "
+         "na mesma conexão e na mesma semana.", "",
+         "### Tamanho da conexão", "",
+         "| Conexão (MW) | Energia aproveitada sem cliente | Ganho com o data center |",
+         "|---:|---:|---:|"]
+    L += [f"| {num(r['conexao_mw'])} | {num(r['aproveitada_sem_cliente'], 1)}% | {sinal(r['ganho'])} |"
+          for r in s["conexao"]]
+    L += ["", f"### Preço do contrato do data center (conexão de {num(dados.CONEXAO_MW)} MW)", "",
+          "| Preço (u.m./MWh) | Ganho com o data center |", "|---:|---:|"]
+    L += [f"| {num(r['preco'])} | {sinal(r['ganho'])} |" for r in s["preco"]]
+    L += ["", "### Quanto do consumo de cada cliente o parque atende", "",
+          "| Cliente | Parte do consumo atendida | Horas com 100% de atendimento |", "|---|---:|---:|"]
+    L += [f"| {r['cliente']} | {num(r['atendido'], 1)}% | {r['horas_100']} de {dados.HORAS} |"
+          for r in s["atendimento"]]
+    L += ["", "### Outras semanas de vento e sol (semente aleatória)", "",
+          "| Semente | Ganho com o data center |", "|---:|---:|"]
+    L += [f"| {r['semente']}{' (padrão)' if r['semente'] == dados.SEMENTE else ''} | {sinal(r['ganho'])} |"
+          for r in s["semente"]]
+    return L
 
 
 def estilo(ax):

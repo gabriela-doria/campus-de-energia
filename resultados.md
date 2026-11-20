@@ -31,3 +31,43 @@ Cada linha dá 55% do peso a um critério e divide o resto na proporção origin
 | energia aproveitada | Data center |
 | prazo meses | Indústria de turno diurno |
 | empregos locais | Indústria de turno diurno |
+
+## E se as premissas mudarem?
+
+Ganho com o data center = receita com o data center comparada à receita sem cliente, na mesma conexão e na mesma semana.
+
+### Tamanho da conexão
+
+| Conexão (MW) | Energia aproveitada sem cliente | Ganho com o data center |
+|---:|---:|---:|
+| 100 | 64,1% | +95,6% |
+| 150 | 88,3% | +41,5% |
+| 200 | 99,0% | +26,0% |
+| 300 | 100,0% | +24,5% |
+
+### Preço do contrato do data center (conexão de 100 MW)
+
+| Preço (u.m./MWh) | Ganho com o data center |
+|---:|---:|
+| 130 | +95,6% |
+| 100 | +64,4% |
+| 80 | +50,5% |
+
+### Quanto do consumo de cada cliente o parque atende
+
+| Cliente | Parte do consumo atendida | Horas com 100% de atendimento |
+|---|---:|---:|
+| Data center | 86,8% | 123 de 168 |
+| Indústria de turno diurno | 92,6% | 152 de 168 |
+| Eletrolisador de hidrogênio | 44,6% | 30 de 168 |
+
+### Outras semanas de vento e sol (semente aleatória)
+
+| Semente | Ganho com o data center |
+|---:|---:|
+| 1 | +107,2% |
+| 2 | +116,6% |
+| 3 | +119,8% |
+| 7 (padrão) | +95,6% |
+| 11 | +118,4% |
+| 42 | +113,1% |
